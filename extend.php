@@ -1,0 +1,67 @@
+<?php
+
+/*
+ * This file is part of wyatts97/forum-member-map.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
+use Flarum\Api\Resource;
+use Flarum\Api\Schema;
+use Flarum\Extend;
+use Flarum\Search\Database\DatabaseSearchDriver;
+use Flarum\User\Search\UserSearcher;
+use Flarum\User\User;
+use Wyatts97\ForumMemberMap\Filter\HasMapLocationFilter;
+
+return [
+    (new Extend\Frontend('forum'))
+        ->js(__DIR__.'/js/dist/forum.js')
+        ->css(__DIR__.'/less/forum.less')
+        ->route('/map', 'forum-member-map'),
+
+    (new Extend\Frontend('admin'))
+        ->js(__DIR__.'/js/dist/admin.js')
+        ->css(__DIR__.'/less/admin.less'),
+
+    new Extend\Locales(__DIR__.'/locale'),
+
+    (new Extend\ApiResource(Resource\UserResource::class))
+        ->fields(fn () => [
+            Schema\Str::make('mapLat')
+                ->nullable()
+                ->get(fn (User $user) => $user->map_lat)
+                ->set(fn (User $user, ?string $value) => $user->map_lat = $value)
+                ->writable(fn ($model, $context) => $context->getActor()->id === $model->id
+                    || $context->getActor()->can('edit', $model)),
+
+            Schema\Str::make('mapLng')
+                ->nullable()
+                ->get(fn (User $user) => $user->map_lng)
+                ->set(fn (User $user, ?string $value) => $user->map_lng = $value)
+                ->writable(fn ($model, $context) => $context->getActor()->id === $model->id
+                    || $context->getActor()->can('edit', $model)),
+
+            Schema\Str::make('mapTitle')
+                ->nullable()
+                ->get(fn (User $user) => $user->map_title)
+                ->set(fn (User $user, ?string $value) => $user->map_title = $value)
+                ->writable(fn ($model, $context) => $context->getActor()->id === $model->id
+                    || $context->getActor()->can('edit', $model)),
+
+            Schema\Str::make('mapBio')
+                ->nullable()
+                ->get(fn (User $user) => $user->map_bio)
+                ->set(fn (User $user, ?string $value) => $user->map_bio = $value)
+                ->writable(fn ($model, $context) => $context->getActor()->id === $model->id
+                    || $context->getActor()->can('edit', $model)),
+        ]),
+
+    (new Extend\SearchDriver(DatabaseSearchDriver::class))
+        ->addFilter(UserSearcher::class, HasMapLocationFilter::class),
+
+    (new Extend\Settings())
+        ->serializeToForum('forum-member-map.tileProvider', 'forum-member-map.tileProvider', null, 'openstreetmap')
+        ->serializeToForum('forum-member-map.mapboxToken', 'forum-member-map.mapboxToken'),
+];

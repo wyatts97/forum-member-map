@@ -1,0 +1,29 @@
+wyatts97-forum-member-map:
+  admin:
+    tile_provider_label: Map Tile Provider
+    tile_provider_osm: "OpenStreetMap (free, no API key)"
+    tile_provider_mapbox: "Mapbox (API key required)"
+    mapbox_token_label: Mapbox Public Token
+    mapbox_token_help: "Get your free public token at https://account.mapbox.com/ — only needed when Mapbox is selected above."
+
+  forum:
+    page_title: Member Map
+    page_subtitle: See where members of this community are located. Click a pin to learn more about them.
+    set_location: "📍 Set My Location"
+    move_pin: "📍 Move My Pin"
+    cancel_placement: Cancel
+    click_to_place: Click anywhere on the map to drop your pin.
+    login_hint: Log in to add yourself to the map.
+
+    popup_joined: "Joined {date}"
+    popup_view_profile: View Profile
+
+    modal_title: Set Your Map Info
+    modal_coords_label: Pin Location
+    modal_title_label: Title
+    modal_title_placeholder: e.g. Hiker, Developer, Coffee lover…
+    modal_bio_label: Bio
+    modal_bio_placeholder: Write a short line about yourself…
+    modal_save: Save Pin
+    modal_cancel: Cancel
+    modal_save_error: Something went wrong. Please try again.

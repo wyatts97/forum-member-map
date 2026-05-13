@@ -1,0 +1,39 @@
+{
+    "name": "wyatts97/forum-member-map",
+    "description": "Show a community member map so users can discover each other by location",
+    "keywords": [
+        "member map",
+        "community map",
+        "user location",
+        "leaflet"
+    ],
+    "type": "flarum-extension",
+    "license": "MIT",
+    "require": {
+        "flarum/core": "^2.0.0"
+    },
+    "require-dev": {
+        "flarum/testing": "^2.0.0"
+    },
+    "authors": [
+        {
+            "name": "Wyatts97"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Wyatts97\\ForumMemberMap\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Forum Member Map",
+            "category": "feature",
+            "icon": {
+                "name": "fas fa-map-marked-alt",
+                "backgroundColor": "#2563eb",
+                "color": "white"
+            }
+        }
+    }
+}
