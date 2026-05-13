@@ -26,22 +26,33 @@ export default class MemberMapPage extends Page {
       return;
     }
 
+    const handleUsers = (users) => {
+      this.users = users.filter(
+        (u) => u.attribute('mapLat') != null && u.attribute('mapLng') != null
+      );
+      this.loading = false;
+      if (this.map) {
+        this.syncAllMarkers();
+      }
+      m.redraw();
+    };
+
     app.store
       .find('users', {
         filter: { hasLocation: '1' },
         page: { limit: 500 },
       })
-      .then((users) => {
-        this.users = users;
-        this.loading = false;
-        if (this.map) {
-          this.syncAllMarkers();
-        }
-        m.redraw();
-      })
-      .catch(() => {
-        this.loading = false;
-        m.redraw();
+      .then(handleUsers)
+      .catch((err) => {
+        console.warn('[forum-member-map] hasLocation filter failed, falling back to client-side filtering:', err);
+        app.store
+          .find('users', { page: { limit: 500 } })
+          .then(handleUsers)
+          .catch((err2) => {
+            console.error('[forum-member-map] failed to load users:', err2);
+            this.loading = false;
+            m.redraw();
+          });
       });
   }
 

@@ -16,17 +16,18 @@ class HasMapLocationFilter implements FilterInterface
         return 'hasLocation';
     }
 
-    public function filter(SearchState $state, string $filterValue, bool $negate): void
+    public function filter(SearchState $state, $filterValue, bool $negate): void
     {
-        $truthy = filter_var($filterValue, FILTER_VALIDATE_BOOLEAN);
-        $wantWithLocation = $truthy XOR $negate;
+        if (is_array($filterValue)) {
+            $filterValue = reset($filterValue);
+        }
 
-        if ($wantWithLocation) {
+        $truthy = filter_var($filterValue, FILTER_VALIDATE_BOOLEAN);
+
+        if ($truthy && ! $negate) {
             $state->getQuery()
-                ->whereNotNull('users.map_lat')
-                ->whereNotNull('users.map_lng');
-        } else {
-            $state->getQuery()->whereNull('users.map_lat');
+                ->whereNotNull('map_lat')
+                ->whereNotNull('map_lng');
         }
     }
 }
