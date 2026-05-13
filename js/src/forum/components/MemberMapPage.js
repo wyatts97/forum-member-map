@@ -188,6 +188,7 @@ export default class MemberMapPage extends Page {
 
   view() {
     const loggedIn = !!app.session.user;
+    const canAddPin = loggedIn && app.session.user.attribute('canAddMapPin');
     const userHasPin =
       loggedIn &&
       app.session.user.attribute('mapLat') &&
@@ -204,7 +205,7 @@ export default class MemberMapPage extends Page {
           </p>
 
           <div className="MemberMapPage-toolbar">
-            {loggedIn && (
+            {canAddPin && (
               <Button
                 className={`Button ${this.placingPin ? 'Button--danger' : 'Button--primary'}`}
                 icon={this.placingPin ? 'fas fa-times' : 'fas fa-map-marker-alt'}
@@ -227,6 +228,12 @@ export default class MemberMapPage extends Page {
             {!loggedIn && (
               <span className="MemberMapPage-loginHint helpText">
                 {app.translator.trans('wyatts97-forum-member-map.forum.login_hint')}
+              </span>
+            )}
+
+            {loggedIn && !canAddPin && (
+              <span className="MemberMapPage-loginHint helpText">
+                {app.translator.trans('wyatts97-forum-member-map.forum.no_permission_hint')}
               </span>
             )}
           </div>

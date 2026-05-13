@@ -33,29 +33,39 @@ return [
                 ->nullable()
                 ->get(fn (User $user) => $user->map_lat)
                 ->set(fn (User $user, ?string $value) => $user->map_lat = $value)
-                ->writable(fn ($model, $context) => $context->getActor()->id === $model->id
+                ->writable(fn ($model, $context) =>
+                    ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
                     || $context->getActor()->can('edit', $model)),
 
             Schema\Str::make('mapLng')
                 ->nullable()
                 ->get(fn (User $user) => $user->map_lng)
                 ->set(fn (User $user, ?string $value) => $user->map_lng = $value)
-                ->writable(fn ($model, $context) => $context->getActor()->id === $model->id
+                ->writable(fn ($model, $context) =>
+                    ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
                     || $context->getActor()->can('edit', $model)),
 
             Schema\Str::make('mapTitle')
                 ->nullable()
                 ->get(fn (User $user) => $user->map_title)
                 ->set(fn (User $user, ?string $value) => $user->map_title = $value)
-                ->writable(fn ($model, $context) => $context->getActor()->id === $model->id
+                ->writable(fn ($model, $context) =>
+                    ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
                     || $context->getActor()->can('edit', $model)),
 
             Schema\Str::make('mapBio')
                 ->nullable()
                 ->get(fn (User $user) => $user->map_bio)
                 ->set(fn (User $user, ?string $value) => $user->map_bio = $value)
-                ->writable(fn ($model, $context) => $context->getActor()->id === $model->id
+                ->writable(fn ($model, $context) =>
+                    ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
                     || $context->getActor()->can('edit', $model)),
+
+            Schema\Boolean::make('canAddMapPin')
+                ->get(fn (User $user, $context) =>
+                    $user->id === $context->getActor()->id
+                    && $context->getActor()->can('forum-member-map.addPin')
+                ),
         ]),
 
     (new Extend\SearchDriver(DatabaseSearchDriver::class))
@@ -63,5 +73,6 @@ return [
 
     (new Extend\Settings())
         ->serializeToForum('forum-member-map.tileProvider', 'forum-member-map.tileProvider', null, 'openstreetmap')
-        ->serializeToForum('forum-member-map.mapboxToken', 'forum-member-map.mapboxToken'),
+        ->serializeToForum('forum-member-map.mapboxToken', 'forum-member-map.mapboxToken')
+        ->serializeToForum('forum-member-map.showNavLink', 'forum-member-map.showNavLink', 'boolval', false),
 ];
