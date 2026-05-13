@@ -17,8 +17,14 @@ export default class MemberMapPage extends Page {
     this.clusterGroup = null;
     this.markerMap = {};
     this.placingPin = false;
+    this.canView = !!(app.session.user && app.session.user.attribute('canViewMap'));
 
     app.setTitle(app.translator.trans('wyatts97-forum-member-map.forum.page_title'));
+
+    if (!this.canView) {
+      this.loading = false;
+      return;
+    }
 
     app.store
       .find('users', {
@@ -41,6 +47,7 @@ export default class MemberMapPage extends Page {
 
   oncreate(vnode) {
     super.oncreate(vnode);
+    if (!this.canView) return;
     this.initMap();
   }
 
@@ -203,6 +210,24 @@ export default class MemberMapPage extends Page {
 
   view() {
     const loggedIn = !!app.session.user;
+
+    if (!this.canView) {
+      return (
+        <div className="MemberMapPage">
+          <div className="MemberMapPage-header container">
+            <h2 className="MemberMapPage-title">
+              {app.translator.trans('wyatts97-forum-member-map.forum.page_title')}
+            </h2>
+            <p className="MemberMapPage-loginHint helpText">
+              {loggedIn
+                ? app.translator.trans('wyatts97-forum-member-map.forum.no_view_permission_hint')
+                : app.translator.trans('wyatts97-forum-member-map.forum.login_hint')}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
     const canAddPin = loggedIn && app.session.user.attribute('canAddMapPin');
     const userHasPin =
       loggedIn &&

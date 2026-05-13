@@ -4,8 +4,11 @@ namespace Wyatts97\ForumMemberMap\Filter;
 
 use Flarum\Search\Database\DatabaseSearchState;
 use Flarum\Search\Filter\FilterInterface;
-use Flarum\User\User;
+use Flarum\Search\SearchState;
 
+/**
+ * @implements FilterInterface<DatabaseSearchState>
+ */
 class HasMapLocationFilter implements FilterInterface
 {
     public function getFilterKey(): string
@@ -13,17 +16,17 @@ class HasMapLocationFilter implements FilterInterface
         return 'hasLocation';
     }
 
-    public function filter(DatabaseSearchState $state, string|array $value, bool $negate): void
+    public function filter(SearchState $state, string $filterValue, bool $negate): void
     {
-        $truthy = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+        $truthy = filter_var($filterValue, FILTER_VALIDATE_BOOLEAN);
+        $wantWithLocation = $truthy XOR $negate;
 
-        if ($truthy && !$negate) {
+        if ($wantWithLocation) {
             $state->getQuery()
-                ->whereNotNull('map_lat')
-                ->whereNotNull('map_lng');
-        } elseif (!$truthy || $negate) {
-            $state->getQuery()
-                ->whereNull('map_lat');
+                ->whereNotNull('users.map_lat')
+                ->whereNotNull('users.map_lng');
+        } else {
+            $state->getQuery()->whereNull('users.map_lat');
         }
     }
 }

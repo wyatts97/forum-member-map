@@ -6,7 +6,8 @@ import LinkButton from 'flarum/common/components/LinkButton';
 import IndexPage from 'flarum/forum/components/IndexPage';
 
 extend(IndexPage.prototype, 'navItems', function (items) {
-  if (app.forum.attribute('forum-member-map.showNavLink')) {
+  const canView = app.session.user && app.session.user.attribute('canViewMap');
+  if (app.forum.attribute('forum-member-map.showNavLink') && canView) {
     items.add(
       'forum-member-map',
       <LinkButton href={app.route('forum-member-map')} icon="fas fa-map-marked-alt">

@@ -66,6 +66,12 @@ return [
                     $user->id === $context->getActor()->id
                     && $context->getActor()->can('forum-member-map.addPin')
                 ),
+
+            Schema\Boolean::make('canViewMap')
+                ->get(fn (User $user, $context) =>
+                    $user->id === $context->getActor()->id
+                    && $context->getActor()->can('forum-member-map.viewMap')
+                ),
         ]),
 
     (new Extend\SearchDriver(DatabaseSearchDriver::class))

@@ -7,18 +7,20 @@ wyatts97-forum-member-map:
     mapbox_token_help: "Get your free public token at https://account.mapbox.com/ — only needed when Mapbox is selected above."
     show_nav_link_label: Show map link in forum navigation
     show_nav_link_help: Adds a 'Member Map' link to the left-hand sidebar of the forum index page.
+    permission_view_map: View the member map
     permission_add_pin: Add/move pin on member map
 
   forum:
     page_title: Member Map
     page_subtitle: See where members of this community are located. Click a pin to learn more about them.
-    set_location: "📍 Set My Location"
-    move_pin: "📍 Move My Pin"
+    set_location: "Set My Location"
+    move_pin: "Move My Pin"
     remove_pin: Remove My Pin
     cancel_placement: Cancel
     click_to_place: Click anywhere on the map to drop your pin.
     login_hint: Log in to add yourself to the map.
     no_permission_hint: Your account is not yet approved to add a pin to the map.
+    no_view_permission_hint: You don't have permission to view the member map.
     nav_link: Member Map
 
     popup_joined: "Joined {date}"

@@ -36,6 +36,15 @@ export default [
     )
     .permission(
       () => ({
+        permission: 'forum-member-map.viewMap',
+        icon: 'fas fa-map',
+        label: app.translator.trans('wyatts97-forum-member-map.admin.permission_view_map', {}, true),
+      }),
+      'view',
+      95
+    )
+    .permission(
+      () => ({
         permission: 'forum-member-map.addPin',
         icon: 'fas fa-map-marker-alt',
         label: app.translator.trans('wyatts97-forum-member-map.admin.permission_add_pin', {}, true),
