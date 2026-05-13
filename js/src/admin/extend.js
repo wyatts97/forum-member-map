@@ -39,8 +39,8 @@ export default [
         permission: 'forum-member-map.addPin',
         icon: 'fas fa-map-marker-alt',
         label: app.translator.trans('wyatts97-forum-member-map.admin.permission_add_pin', {}, true),
-        allowGuest: false,
       }),
+      'start',
       95
     ),
 ];

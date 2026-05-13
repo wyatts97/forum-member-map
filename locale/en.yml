@@ -14,6 +14,7 @@ wyatts97-forum-member-map:
     page_subtitle: See where members of this community are located. Click a pin to learn more about them.
     set_location: "📍 Set My Location"
     move_pin: "📍 Move My Pin"
+    remove_pin: Remove My Pin
     cancel_placement: Cancel
     click_to_place: Click anywhere on the map to drop your pin.
     login_hint: Log in to add yourself to the map.

@@ -186,6 +186,21 @@ export default class MemberMapPage extends Page {
     m.redraw();
   }
 
+  removePin() {
+    const user = app.session.user;
+    const userId = String(user.id());
+
+    user
+      .save({ mapLat: null, mapLng: null, mapTitle: null, mapBio: null })
+      .then(() => {
+        if (this.clusterGroup && this.markerMap[userId]) {
+          this.clusterGroup.removeLayer(this.markerMap[userId]);
+          delete this.markerMap[userId];
+        }
+        m.redraw();
+      });
+  }
+
   view() {
     const loggedIn = !!app.session.user;
     const canAddPin = loggedIn && app.session.user.attribute('canAddMapPin');
@@ -216,6 +231,16 @@ export default class MemberMapPage extends Page {
                   : userHasPin
                   ? app.translator.trans('wyatts97-forum-member-map.forum.move_pin')
                   : app.translator.trans('wyatts97-forum-member-map.forum.set_location')}
+              </Button>
+            )}
+
+            {canAddPin && userHasPin && !this.placingPin && (
+              <Button
+                className="Button Button--danger"
+                icon="fas fa-trash-alt"
+                onclick={this.removePin.bind(this)}
+              >
+                {app.translator.trans('wyatts97-forum-member-map.forum.remove_pin')}
               </Button>
             )}
 
