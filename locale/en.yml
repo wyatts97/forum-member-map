@@ -35,3 +35,9 @@ wyatts97-forum-member-map:
     modal_save: Save Pin
     modal_cancel: Cancel
     modal_save_error: Something went wrong. Please try again.
+    map_load_error: Could not load member map data. Please try refreshing the page.
+    no_members: No members have added themselves to the map yet.
+    validation_lat: Latitude must be a number between -90 and 90.
+    validation_lng: Longitude must be a number between -180 and 180.
+    validation_title: Title must not exceed 100 characters.
+    validation_bio: Bio must not exceed 500 characters.

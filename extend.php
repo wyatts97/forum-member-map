@@ -11,9 +11,11 @@ use Flarum\Api\Resource;
 use Flarum\Api\Schema;
 use Flarum\Extend;
 use Flarum\Search\Database\DatabaseSearchDriver;
+use Flarum\User\Event\Saving;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
 use Wyatts97\ForumMemberMap\Filter\HasMapLocationFilter;
+use Wyatts97\ForumMemberMap\Listeners\ValidateMapLocation;
 
 return [
     (new Extend\Frontend('forum'))
@@ -34,36 +36,32 @@ return [
                 ->set(fn (User $user, ?string $value) => $user->map_lat = $value)
                 ->writable(fn ($model, $context) =>
                     ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
-                    || $context->getActor()->can('edit', $model))
-                ->rules(['nullable', 'numeric', 'min:-90', 'max:90']),
-
+                    || $context->getActor()->can('edit', $model)),
+                
             Schema\Str::make('mapLng')
                 ->nullable()
                 ->get(fn (User $user) => $user->map_lng)
                 ->set(fn (User $user, ?string $value) => $user->map_lng = $value)
                 ->writable(fn ($model, $context) =>
                     ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
-                    || $context->getActor()->can('edit', $model))
-                ->rules(['nullable', 'numeric', 'min:-180', 'max:180']),
-
+                    || $context->getActor()->can('edit', $model)),
+                
             Schema\Str::make('mapTitle')
                 ->nullable()
                 ->get(fn (User $user) => $user->map_title)
                 ->set(fn (User $user, ?string $value) => $user->map_title = $value)
                 ->writable(fn ($model, $context) =>
                     ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
-                    || $context->getActor()->can('edit', $model))
-                ->rules(['nullable', 'string', 'max:100']),
-
+                    || $context->getActor()->can('edit', $model)),
+                
             Schema\Str::make('mapBio')
                 ->nullable()
                 ->get(fn (User $user) => $user->map_bio)
                 ->set(fn (User $user, ?string $value) => $user->map_bio = $value)
                 ->writable(fn ($model, $context) =>
                     ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
-                    || $context->getActor()->can('edit', $model))
-                ->rules(['nullable', 'string', 'max:500']),
-
+                    || $context->getActor()->can('edit', $model)),
+                
             Schema\Boolean::make('canAddMapPin')
                 ->get(fn (User $user, $context) =>
                     $user->id === $context->getActor()->id
@@ -79,6 +77,9 @@ return [
 
     (new Extend\SearchDriver(DatabaseSearchDriver::class))
         ->addFilter(UserSearcher::class, HasMapLocationFilter::class),
+
+    (new Extend\Event())
+        ->listen(Saving::class, ValidateMapLocation::class),
 
     (new Extend\Settings())
         ->serializeToForum('forum-member-map.tileProvider', 'forum-member-map.tileProvider', null, 'openstreetmap')

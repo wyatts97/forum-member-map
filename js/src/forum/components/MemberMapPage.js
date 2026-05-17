@@ -18,6 +18,7 @@ export default class MemberMapPage extends Page {
     this.markerMap = {};
     this.placingPin = false;
     this.canView = !!(app.session.user && app.session.user.attribute('canViewMap'));
+    this.loadError = false;
 
     app.setTitle(app.translator.trans('wyatts97-forum-member-map.forum.page_title'));
 
@@ -51,6 +52,7 @@ export default class MemberMapPage extends Page {
           .catch((err2) => {
             console.error('[forum-member-map] failed to load users:', err2);
             this.loading = false;
+            this.loadError = true;
             m.redraw();
           });
       });
@@ -218,7 +220,10 @@ export default class MemberMapPage extends Page {
         m.redraw();
       })
       .catch(() => {
-        alert(app.translator.trans('wyatts97-forum-member-map.forum.modal_save_error'));
+        app.alerts.show(
+          { type: 'error' },
+          app.translator.trans('wyatts97-forum-member-map.forum.modal_save_error')
+        );
       });
   }
 
@@ -307,6 +312,16 @@ export default class MemberMapPage extends Page {
           {this.loading && (
             <div className="MemberMapPage-loading">
               <LoadingIndicator size="large" />
+            </div>
+          )}
+          {!this.loading && this.loadError && (
+            <div className="MemberMapPage-empty">
+              {app.translator.trans('wyatts97-forum-member-map.forum.map_load_error')}
+            </div>
+          )}
+          {!this.loading && !this.loadError && this.users.length === 0 && (
+            <div className="MemberMapPage-empty">
+              {app.translator.trans('wyatts97-forum-member-map.forum.no_members')}
             </div>
           )}
           <div id="member-map" />
