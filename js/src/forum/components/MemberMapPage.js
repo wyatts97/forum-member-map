@@ -216,6 +216,9 @@ export default class MemberMapPage extends Page {
           delete this.markerMap[userId];
         }
         m.redraw();
+      })
+      .catch(() => {
+        alert(app.translator.trans('wyatts97-forum-member-map.forum.modal_save_error'));
       });
   }
 

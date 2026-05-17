@@ -108,9 +108,7 @@ export default class EditLocationModal extends Modal {
         if (this.attrs.onSave) {
           this.attrs.onSave(
             parseFloat(this.lat),
-            parseFloat(this.lng),
-            this.mapTitle(),
-            this.mapBio()
+            parseFloat(this.lng)
           );
         }
         app.modal.close();

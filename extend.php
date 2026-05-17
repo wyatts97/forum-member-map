@@ -22,8 +22,7 @@ return [
         ->route('/map', 'forum-member-map'),
 
     (new Extend\Frontend('admin'))
-        ->js(__DIR__.'/js/dist/admin.js')
-        ->css(__DIR__.'/less/admin.less'),
+        ->js(__DIR__.'/js/dist/admin.js'),
 
     new Extend\Locales(__DIR__.'/locale'),
 
@@ -35,7 +34,8 @@ return [
                 ->set(fn (User $user, ?string $value) => $user->map_lat = $value)
                 ->writable(fn ($model, $context) =>
                     ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
-                    || $context->getActor()->can('edit', $model)),
+                    || $context->getActor()->can('edit', $model))
+                ->rules(['nullable', 'numeric', 'min:-90', 'max:90']),
 
             Schema\Str::make('mapLng')
                 ->nullable()
@@ -43,7 +43,8 @@ return [
                 ->set(fn (User $user, ?string $value) => $user->map_lng = $value)
                 ->writable(fn ($model, $context) =>
                     ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
-                    || $context->getActor()->can('edit', $model)),
+                    || $context->getActor()->can('edit', $model))
+                ->rules(['nullable', 'numeric', 'min:-180', 'max:180']),
 
             Schema\Str::make('mapTitle')
                 ->nullable()
@@ -51,7 +52,8 @@ return [
                 ->set(fn (User $user, ?string $value) => $user->map_title = $value)
                 ->writable(fn ($model, $context) =>
                     ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
-                    || $context->getActor()->can('edit', $model)),
+                    || $context->getActor()->can('edit', $model))
+                ->rules(['nullable', 'string', 'max:100']),
 
             Schema\Str::make('mapBio')
                 ->nullable()
@@ -59,7 +61,8 @@ return [
                 ->set(fn (User $user, ?string $value) => $user->map_bio = $value)
                 ->writable(fn ($model, $context) =>
                     ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
-                    || $context->getActor()->can('edit', $model)),
+                    || $context->getActor()->can('edit', $model))
+                ->rules(['nullable', 'string', 'max:500']),
 
             Schema\Boolean::make('canAddMapPin')
                 ->get(fn (User $user, $context) =>
