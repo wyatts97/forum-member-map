@@ -8,6 +8,7 @@ export default class UserPinPopup extends Component {
     const displayName = user.displayName();
     const avatarUrl = user.avatarUrl();
     const mapTitle = user.attribute('mapTitle');
+    const mapLocationLabel = user.attribute('mapLocationLabel');
     const mapBio = user.attribute('mapBio');
     const joinTime = user.joinTime();
     const profileUrl = app.route('user', { username: user.slug() });
@@ -31,6 +32,12 @@ export default class UserPinPopup extends Component {
           <div className="MemberMapPopup-identity">
             <strong className="MemberMapPopup-name">{displayName}</strong>
             {mapTitle && <span className="MemberMapPopup-title">{mapTitle}</span>}
+            {mapLocationLabel && (
+              <span className="MemberMapPopup-location">
+                <i className="fas fa-map-marker-alt" />
+                {mapLocationLabel}
+              </span>
+            )}
           </div>
         </div>
 

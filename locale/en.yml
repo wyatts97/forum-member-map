@@ -30,8 +30,12 @@ wyatts97-forum-member-map:
     modal_coords_label: Pin Location
     modal_title_label: Title
     modal_title_placeholder: e.g. Hiker, Developer, Coffee lover…
+    modal_location_label: Location label
+    modal_location_placeholder: e.g. Dallas, Texas
     modal_bio_label: Bio
     modal_bio_placeholder: Write a short line about yourself…
+    modal_visible_label: Show my pin on the member map
+    modal_visible_help: Turn this off to save your map info but hide your pin from other members.
     modal_save: Save Pin
     modal_cancel: Cancel
     modal_save_error: Something went wrong. Please try again.
@@ -41,3 +45,4 @@ wyatts97-forum-member-map:
     validation_lng: Longitude must be a number between -180 and 180.
     validation_title: Title must not exceed 100 characters.
     validation_bio: Bio must not exceed 500 characters.
+    validation_location_label: Location label must not exceed 120 characters.

@@ -27,12 +27,14 @@ class HasMapLocationFilter implements FilterInterface
         if ($truthy && ! $negate) {
             $state->getQuery()
                 ->whereNotNull('map_lat')
-                ->whereNotNull('map_lng');
+                ->whereNotNull('map_lng')
+                ->where('map_visible', true);
         } elseif (! $truthy || $negate) {
             $state->getQuery()
                 ->where(function ($query) {
                     $query->whereNull('map_lat')
-                          ->orWhereNull('map_lng');
+                          ->orWhereNull('map_lng')
+                          ->orWhere('map_visible', false);
                 });
         }
     }

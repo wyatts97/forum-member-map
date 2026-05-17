@@ -51,5 +51,14 @@ class ValidateMapLocation
                 ]);
             }
         }
+
+        if (array_key_exists('mapLocationLabel', $attributes)) {
+            $locationLabel = $attributes['mapLocationLabel'];
+            if ($locationLabel !== null && mb_strlen($locationLabel) > 120) {
+                throw ValidationException::withMessages([
+                    'mapLocationLabel' => 'wyatts97-forum-member-map.forum.validation_location_label',
+                ]);
+            }
+        }
     }
 }

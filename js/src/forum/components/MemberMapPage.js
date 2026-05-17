@@ -29,7 +29,10 @@ export default class MemberMapPage extends Page {
 
     const handleUsers = (users) => {
       this.users = users.filter(
-        (u) => u.attribute('mapLat') != null && u.attribute('mapLng') != null
+        (u) =>
+          u.attribute('mapLat') != null &&
+          u.attribute('mapLng') != null &&
+          u.attribute('mapVisible') !== false
       );
       this.loading = false;
       if (this.map) {
@@ -187,12 +190,24 @@ export default class MemberMapPage extends Page {
       lat,
       lng,
       currentTitle: currentUser.attribute('mapTitle') || '',
+      currentLocationLabel: currentUser.attribute('mapLocationLabel') || '',
       currentBio: currentUser.attribute('mapBio') || '',
-      onSave: (savedLat, savedLng) => {
+      currentVisible: currentUser.attribute('mapVisible') !== false,
+      onSave: (savedLat, savedLng, mapVisible) => {
         this.placingPin = false;
         const mapEl = this.map && this.map.getContainer();
         if (mapEl) mapEl.classList.remove('member-map--placing');
-        this.upsertMarker(currentUser, savedLat, savedLng);
+        if (mapVisible === false) {
+          const userId = String(currentUser.id());
+          if (this.clusterGroup && this.markerMap[userId]) {
+            this.clusterGroup.removeLayer(this.markerMap[userId]);
+            delete this.markerMap[userId];
+          }
+          this.users = this.users.filter((user) => String(user.id()) !== userId);
+        } else {
+          this.users = this.users.filter((user) => String(user.id()) !== String(currentUser.id())).concat(currentUser);
+          this.upsertMarker(currentUser, savedLat, savedLng);
+        }
         m.redraw();
       },
     });
@@ -211,7 +226,7 @@ export default class MemberMapPage extends Page {
     const userId = String(user.id());
 
     user
-      .save({ mapLat: null, mapLng: null, mapTitle: null, mapBio: null })
+      .save({ mapLat: null, mapLng: null, mapTitle: null, mapLocationLabel: null, mapBio: null, mapVisible: true })
       .then(() => {
         if (this.clusterGroup && this.markerMap[userId]) {
           this.clusterGroup.removeLayer(this.markerMap[userId]);

@@ -9,6 +9,10 @@
 
   &-header {
     padding: 20px 0 12px;
+
+    @media (max-width: 767px) {
+      padding: 14px 12px 10px;
+    }
   }
 
   &-title {
@@ -16,6 +20,10 @@
     font-weight: 700;
     margin: 0 0 4px;
     color: var(--heading-color);
+
+    @media (max-width: 767px) {
+      font-size: 1.25em;
+    }
   }
 
   &-subtitle {
@@ -29,6 +37,17 @@
     gap: 12px;
     flex-wrap: wrap;
     margin-bottom: 12px;
+
+    @media (max-width: 767px) {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 8px;
+
+      .Button {
+        justify-content: center;
+        width: 100%;
+      }
+    }
   }
 
   &-hint {
@@ -48,10 +67,14 @@
   &-mapWrap {
     position: relative;
     flex: 1;
-    min-height: 520px;
+    min-height: clamp(420px, calc(100vh - 170px), 760px);
+
+    @media (max-width: 1024px) {
+      min-height: clamp(420px, calc(100vh - 190px), 680px);
+    }
 
     @media (max-width: 767px) {
-      min-height: 360px;
+      min-height: calc(100vh - 230px);
     }
   }
 
@@ -72,24 +95,35 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.92);
-    border-radius: 8px;
+    background: var(--body-bg);
+    border: 1px solid var(--control-bg);
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
     color: var(--muted-color);
     font-size: 0.95em;
     max-width: 360px;
     padding: 14px 18px;
     text-align: center;
+
+    @media (max-width: 767px) {
+      max-width: calc(100% - 32px);
+      width: calc(100% - 32px);
+    }
   }
 }
 
 #member-map {
   width: 100%;
   height: 100%;
-  min-height: 520px;
+  min-height: clamp(420px, calc(100vh - 170px), 760px);
   border-top: 1px solid var(--control-bg);
 
+  @media (max-width: 1024px) {
+    min-height: clamp(420px, calc(100vh - 190px), 680px);
+  }
+
   @media (max-width: 767px) {
-    min-height: 360px;
+    min-height: calc(100vh - 230px);
   }
 }
 
@@ -171,7 +205,7 @@
 }
 
 .MemberMapPopup {
-  width: 240px;
+  width: min(280px, calc(100vw - 48px));
   font-family: inherit;
   font-size: 13px;
 
@@ -236,6 +270,18 @@
     white-space: nowrap;
   }
 
+  &-location {
+    align-items: center;
+    color: var(--muted-color);
+    display: flex;
+    font-size: 11px;
+    gap: 4px;
+    margin-top: 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   &-bio {
     margin: 0;
     padding: 10px 14px;
@@ -253,6 +299,11 @@
     justify-content: space-between;
     padding: 8px 14px;
     gap: 8px;
+
+    @media (max-width: 480px) {
+      align-items: stretch;
+      flex-direction: column;
+    }
   }
 
   &-joined {
@@ -266,6 +317,19 @@
     padding: 4px 10px;
     white-space: nowrap;
     text-decoration: none !important;
+    color: var(--button-primary-color, #fff) !important;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: var(--button-primary-color, #fff) !important;
+      text-decoration: none !important;
+    }
+
+    @media (max-width: 480px) {
+      text-align: center;
+      width: 100%;
+    }
   }
 }
 
@@ -287,8 +351,32 @@
     margin: 0;
   }
 
+  &-toggle {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    font-weight: 600;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  &-help {
+    margin: 0;
+  }
+
   .Form-group .Button + .Button {
     margin-left: 8px;
+
+    @media (max-width: 480px) {
+      margin-left: 0;
+      margin-top: 8px;
+    }
+  }
+
+  .Form-group .Button {
+    @media (max-width: 480px) {
+      width: 100%;
+    }
   }
 }
 

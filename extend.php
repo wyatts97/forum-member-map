@@ -61,6 +61,21 @@ return [
                 ->writable(fn ($model, $context) =>
                     ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
                     || $context->getActor()->can('edit', $model)),
+
+            Schema\Str::make('mapLocationLabel')
+                ->nullable()
+                ->get(fn (User $user) => $user->map_location_label)
+                ->set(fn (User $user, ?string $value) => $user->map_location_label = $value)
+                ->writable(fn ($model, $context) =>
+                    ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
+                    || $context->getActor()->can('edit', $model)),
+
+            Schema\Boolean::make('mapVisible')
+                ->get(fn (User $user) => $user->map_visible ?? true)
+                ->set(fn (User $user, bool $value) => $user->map_visible = $value)
+                ->writable(fn ($model, $context) =>
+                    ($context->getActor()->id === $model->id && $context->getActor()->can('forum-member-map.addPin'))
+                    || $context->getActor()->can('edit', $model)),
                 
             Schema\Boolean::make('canAddMapPin')
                 ->get(fn (User $user, $context) =>

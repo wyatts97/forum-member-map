@@ -11,7 +11,9 @@ export default class EditLocationModal extends Modal {
     this.lat = this.attrs.lat;
     this.lng = this.attrs.lng;
     this.mapTitle = Stream(this.attrs.currentTitle || '');
+    this.mapLocationLabel = Stream(this.attrs.currentLocationLabel || '');
     this.mapBio = Stream(this.attrs.currentBio || '');
+    this.mapVisible = Stream(this.attrs.currentVisible !== false);
     this.saving = false;
     this.error = null;
   }
@@ -47,6 +49,17 @@ export default class EditLocationModal extends Modal {
           </div>
 
           <div className="Form-group">
+            <label>{app.translator.trans('wyatts97-forum-member-map.forum.modal_location_label')}</label>
+            <input
+              className="FormControl"
+              type="text"
+              maxLength={120}
+              placeholder={app.translator.trans('wyatts97-forum-member-map.forum.modal_location_placeholder')}
+              bidi={this.mapLocationLabel}
+            />
+          </div>
+
+          <div className="Form-group">
             <label>{app.translator.trans('wyatts97-forum-member-map.forum.modal_bio_label')}</label>
             <textarea
               className="FormControl"
@@ -55,6 +68,22 @@ export default class EditLocationModal extends Modal {
               placeholder={app.translator.trans('wyatts97-forum-member-map.forum.modal_bio_placeholder')}
               bidi={this.mapBio}
             />
+          </div>
+
+          <div className="Form-group">
+            <label className="EditLocationModal-toggle">
+              <input
+                type="checkbox"
+                checked={this.mapVisible()}
+                onchange={(e) => this.mapVisible(e.target.checked)}
+              />
+              <span>
+                {app.translator.trans('wyatts97-forum-member-map.forum.modal_visible_label')}
+              </span>
+            </label>
+            <p className="helpText EditLocationModal-help">
+              {app.translator.trans('wyatts97-forum-member-map.forum.modal_visible_help')}
+            </p>
           </div>
 
           {this.error && (
@@ -102,13 +131,16 @@ export default class EditLocationModal extends Modal {
         mapLat: String(parseFloat(this.lat).toFixed(5)),
         mapLng: String(parseFloat(this.lng).toFixed(5)),
         mapTitle: this.mapTitle(),
+        mapLocationLabel: this.mapLocationLabel(),
         mapBio: this.mapBio(),
+        mapVisible: this.mapVisible(),
       })
       .then(() => {
         if (this.attrs.onSave) {
           this.attrs.onSave(
             parseFloat(this.lat),
-            parseFloat(this.lng)
+            parseFloat(this.lng),
+            this.mapVisible()
           );
         }
         app.modal.close();
